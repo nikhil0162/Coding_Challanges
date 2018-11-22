@@ -1,0 +1,669 @@
+ADD DUPLICATE ( BST )
+
+
+QUESTION--------------------------------------------------------
+
+For each node in a binary search tree, create a new duplicate node, and insert the duplicate as the left child of the original node.
+
+
+Input Format:
+Enter the number of nodes N and add N more numbers to the BST
+
+Constraints:
+None
+Output Format:
+Display the tree
+
+Sample Input:
+3
+2
+1
+3
+Sample Output:
+2 => 2 <= 3
+1 => 2 <= END
+1 => 1 <= END
+END => 1 <= END
+3 => 3 <=END
+END => 3 <=END
+
+
+QUESTION--------------------------------------------------------
+import java.util.*;
+public class BST {
+	private class Node {
+		int data;
+		Node left;
+		Node right;
+
+		public Node(int data, Node left, Node right) {
+			this.data = data;
+			this.left = left;
+			this.right = right;
+		}
+	}
+
+	private Node root;
+	private int size;
+
+	public BST() {
+		this.root = null;
+		this.size = 0;
+	}
+
+	public int size() {
+		return this.size;
+	}
+
+	public boolean isEmpty() {
+		return this.size() == 0;
+	}
+
+	public void add(int data) {
+		this.add(data, this.root);
+	}
+
+	private void add(int data, Node node) {
+		if (this.isEmpty()) {
+			Node n = new Node(data, null, null);
+			this.size++;
+			this.root = n;1
+			return;
+		} else {
+			if (data > node.data && node.right == null) {
+				Node n = new Node(data, null, null);
+				this.size++;
+				node.right = n;
+			} else if (data < node.data && node.left == null) {
+				Node n = new Node(data, null, null);
+				this.size++;
+				node.left = n;
+			} else if (data > node.data) {
+				add(data, node.right);
+			} else if (data < node.data) {
+				add(data, node.left);
+			}
+		}
+	}
+
+	public void display() {
+		this.display(this.root);
+	}
+
+//        public void remove(int data) {
+//		this.root = this.remove(this.root, data);
+//	}
+
+//	private Node remove(Node node, int data) {
+//		if (node == null) {
+//			return null;
+//		}
+//		if (data < node.data) {
+//			node.left = this.remove(node.left, data);
+//			return node;
+//		} else if (data > node.data) {
+//			node.right = this.remove(node.right, data);
+//			return node;
+//		} else {
+//			if (node.left == null && node.right == null) {
+//				this.size--;
+//				return null;
+//			} else if (node.left == null) {
+//				this.size--;
+//				return node.right;
+//			} else if (node.right == null) {
+//				this.size--;
+//				return node.left;
+//			} else {
+//				int lmax = this.max(node.left);
+//				node.data = lmax;
+//				node.left = this.remove(node.left, lmax);
+//				return node;
+//			}
+//		}
+//	}
+
+	private void display(Node node) {
+		if (node.left != null) {
+			System.out.print(node.left.data + " => ");
+		} else {
+			System.out.print("END => ");
+		}
+		System.out.print(node.data);
+		if (node.right != null) {
+			System.out.print(" <= " + node.right.data);
+		} else {
+			System.out.print(" <= END");
+		}
+		System.out.println();
+		if (node.left != null) {
+			display(node.left);
+		}
+		if (node.right != null) {
+			display(node.right);
+		}
+	}	
+	public void duplicate() {
+	        this.duplicate(this.root);
+	    }
+
+	    private void duplicate(Node node) 
+	    {
+                if(node == null)
+                {
+                	return;
+                }
+                
+                duplicate(node.left);
+                duplicate(node.right);
+                
+                Node nl = null;
+                if(node.left != null)
+                {
+                	nl = node.left;
+                }
+                
+                Node nn = new Node(node.data, null, null);
+                if(nl != null)
+                {
+                	nn.left = nl;
+                }
+                
+                node.left = nn;
+	    }
+	    
+	    public static void main (String[] args) {
+	        BST bst=new BST();
+            Scanner s=new Scanner(System.in);
+	        int n=s.nextInt();
+	        for(int i=0;i<n;i++){
+	           bst.add(s.nextInt()); 
+	        }
+		    bst.duplicate();
+		    bst.display();
+	    }
+}
+
+
+
+
+END-----------------------------------END------------------------------------------------------END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+REPLACE WITH SUM ( BST )
+Replace each node with the sum of all greater nodes in a given BST
+
+
+Input Format:
+Enter the number of nodes N and add N more numbers to the BST
+
+Constraints:
+None
+Output Format:
+Display the resulting tree
+
+Sample Input:
+3
+2
+1
+3
+Sample Output:
+5 => 3 <= 0
+END => 5 <= END
+END => 0 <= END
+
+
+
+
+
+
+
+import java.util.*;
+public class BST {
+    private class Node {
+        int data;
+        Node left;
+        Node right;
+
+        Node(int data, Node left, Node right) {
+            this.data = data;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+    private Node root;
+    private int size;
+
+    public BST() {
+        this.root = null;
+        this.size = 0;
+    }
+
+    public void add(int data) {
+        if (this.isEmpty()) {
+            this.root = new Node(data, null, null);
+            this.size++;
+        } else {
+            this.add(this.root, data);
+        }
+    }
+
+    private void add(Node node, int data) {
+        if (data > node.data) {
+            if (node.right != null) {
+                this.add(node.right, data);
+            } else {
+                this.size++;
+                node.right = new Node(data, null, null);
+            }
+        } else if (data < node.data) {
+            if (node.left != null) {
+                this.add(node.left, data);
+            } else {
+                this.size++;
+                node.left = new Node(data, null, null);
+            }
+        } else {
+            // nothing to do
+        }
+    }
+
+    public void remove(int data) {
+        this.root = this.remove(this.root, data);
+    }
+
+    private Node remove(Node node, int data) {
+        if (node == null) {
+            return null;
+        }
+
+        if (data > node.data) {
+            node.right = this.remove(node.right, data);
+            return node;
+        } else if (data < node.data) {
+            node.left = this.remove(node.left, data);
+            return node;
+        } else {
+            // found the element
+            if (node.left == null && node.right == null) {
+                this.size--;
+                return null;
+            } else if (node.left == null) {
+                this.size--;
+                return node.right;
+            } else if (node.right == null) {
+                this.size--;
+                return node.left;
+            } else {
+                // both children
+                int lmax = this.max(node.left);
+                node.data = lmax;
+                node.left = this.remove(node.left, lmax);
+
+                return node;
+            }
+        }
+    }
+
+    public int size() {
+        return this.size;
+    }
+
+    public boolean isEmpty() {
+        return this.size() == 0;
+    }
+
+    public void display() {
+        System.out.println(this);
+    }
+
+    public int max() {
+        return this.max(this.root);
+    }
+
+    private int max(Node node) {
+        int rv = node.data;
+
+        if (node.right != null) {
+            rv = this.max(node.right);
+        }
+
+        return rv;
+    }
+
+    @Override
+    public String toString() {
+        return this.toString(this.root);
+    }
+
+    private String toString(Node node) {
+        if (node == null) {
+            return "";
+        }
+
+        String retVal = "";
+
+        if (node.left != null) {
+            retVal += node.left.data + " => ";
+        } else {
+            retVal += "END" + " => ";
+        }
+
+        retVal += node.data;
+
+        if (node.right != null) {
+            retVal += " <= " + node.right.data;
+        } else {
+            retVal += " <= " + "END";
+        }
+
+        retVal += "\n";
+
+        retVal += this.toString(node.left);
+        retVal += this.toString(node.right);
+
+        return retVal;
+    }
+	public void replaceWLS() 
+	{
+		replaceWLS(this.root);	
+	}
+	int nd = 0;
+	private void replaceWLS(Node node)
+	{
+		if(node == null)
+			return;
+		
+		replaceWLS(node.right);
+		
+		int store = node.data;
+		
+		node.data = nd;
+		nd += store;
+		
+		replaceWLS(node.left);
+	}
+	
+		public static void main(String[] args) {
+		        BST b1= new BST();
+		        Scanner scn = new Scanner(System.in);
+		        int n= scn.nextInt();
+		        while(n!=0){
+		        	int m=scn.nextInt();
+		        	b1.add(m);
+		        	--n;
+		        }
+		        b1.replaceWLS();
+		        b1.display();
+		}
+	}
+
+
+
+END--------------------------------------END----------------------------------------------------END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+LOWEST COMMON ANCESTOR ( BST )
+Find LCA of two elements in a BST.
+
+
+Input Format:
+Enter the number of nodes N and add N more numbers to the BST, then add the two numbers whose LCA is to be found.
+
+Constraints:
+None
+Output Format:
+Display the LCA value.
+
+Sample Input:
+4
+5
+3
+2
+7
+7
+5
+Sample Output:
+5
+
+
+
+
+
+import java.util.*;
+public class BST {
+    private class Node {
+        int data;
+        Node left;
+        Node right;
+
+        Node(int data, Node left, Node right) {
+            this.data = data;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+    private Node root;
+    private int size;
+
+    public BST() {
+        this.root = null;
+        this.size = 0;
+    }
+
+    public void add(int data) {
+        if (this.isEmpty()) {
+            this.root = new Node(data, null, null);
+            this.size++;
+        } else {
+            this.add(this.root, data);
+        }
+    }
+
+    private void add(Node node, int data) {
+        if (data > node.data) {
+            if (node.right != null) {
+                this.add(node.right, data);
+            } else {
+                this.size++;
+                node.right = new Node(data, null, null);
+            }
+        } else if (data < node.data) {
+            if (node.left != null) {
+                this.add(node.left, data);
+            } else {
+                this.size++;
+                node.left = new Node(data, null, null);
+            }
+        } else {
+            // nothing to do
+        }
+    }
+
+    public void remove(int data) {
+        this.root = this.remove(this.root, data);
+    }
+
+    private Node remove(Node node, int data) {
+        if (node == null) {
+            return null;
+        }
+
+        if (data > node.data) {
+            node.right = this.remove(node.right, data);
+            return node;
+        } else if (data < node.data) {
+            node.left = this.remove(node.left, data);
+            return node;
+        } else {
+            // found the element
+            if (node.left == null && node.right == null) {
+                this.size--;
+                return null;
+            } else if (node.left == null) {
+                this.size--;
+                return node.right;
+            } else if (node.right == null) {
+                this.size--;
+                return node.left;
+            } else {
+                // both children
+                int lmax = this.max(node.left);
+                node.data = lmax;
+                node.left = this.remove(node.left, lmax);
+
+                return node;
+            }
+        }
+    }
+
+    public int size() {
+        return this.size;
+    }
+
+    public boolean isEmpty() {
+        return this.size() == 0;
+    }
+
+    public void display() {
+        System.out.println(this);
+    }
+
+    public int max() {
+        return this.max(this.root);
+    }
+
+    private int max(Node node) {
+        int rv = node.data;
+
+        if (node.right != null) {
+            rv = this.max(node.right);
+        }
+
+        return rv;
+    }
+
+    @Override
+    public String toString() {
+        return this.toString(this.root);
+    }
+
+    private String toString(Node node) {
+        if (node == null) {
+            return "";
+        }
+
+        String retVal = "";
+
+        if (node.left != null) {
+            retVal += node.left.data + " => ";
+        } else {
+            retVal += "END" + " => ";
+        }
+
+        retVal += node.data;
+
+        if (node.right != null) {
+            retVal += " <= " + node.right.data;
+        } else {
+            retVal += " <= " + "END";
+        }
+
+        retVal += "\n";
+
+        retVal += this.toString(node.left);
+        retVal += this.toString(node.right);
+
+        return retVal;
+    }
+    public int lca(int d1, int d2) 
+    {
+    	Node ans = lca(this.root, d1, d2, null);
+    	return ans.data;
+    }
+    
+    private Node lca(Node node, int d1, int d2, Node minAncestor)
+    {
+    	if(node == null)
+    	{
+    		return null;
+    	}
+    	
+    	if(node.data == d1 || node.data == d2)
+    	{
+    		return node;
+    	}
+    	
+    	Node nl = lca(node.left, d1, d2, minAncestor);    	
+    	Node nr = lca(node.right, d1, d2, minAncestor);
+    	
+    	if(nl != null && nr != null & nl.data + nr.data == d1 + d2)
+    	{
+    		minAncestor = node;
+    	}else if(nl != null && nr == null)
+    	{
+    		minAncestor = nl;
+    	}else if(nl == null && nr != null)
+    	{
+    		minAncestor = nr;
+    	}
+    	
+    	return minAncestor;
+    }
+    
+public static void main(String[] args) {
+        BST b1= new BST();
+        Scanner scn = new Scanner(System.in);
+        int n= scn.nextInt();
+        while(n!=0){
+        	int m=scn.nextInt();
+        	b1.add(m);
+        	--n;
+        }
+        int d1= scn.nextInt();
+        int d2= scn.nextInt();
+        System.out.println(b1.lca(d1, d2));
+}
+}
+
+
+
+END--------------------------------------END----------------------------------------------------END

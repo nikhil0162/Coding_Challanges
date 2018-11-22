@@ -1,0 +1,904 @@
+LOWEST COMMON ANCESTOR (BINARY TREE )
+Find LCA(Lowest Common Ancestor) of two elements in a Binary Tree.
+
+
+Input Format:
+Enter the values of all the nodes in the binary tree in pre-order format where true suggest the node exists and false suggests it is NULL
+
+Constraints:
+None
+Output Format:
+Display the LCA value.
+
+Sample Input:
+10 true 20 true 40 false false true 50 false false true 30 true 60 false false true 73 false false
+50
+60
+Sample Output:
+10
+
+
+
+
+
+
+public class Main {
+	
+	static Scanner sc = new Scanner(System.in);
+	public static void main(String[] args) 
+	{
+	
+		Main m = new Main();
+		BinaryTree bt = m.new BinaryTree();
+		int sn = sc.nextInt();
+		int en = sc.nextInt();
+		
+		System.out.println(bt.lowestCommonAncestor(sn, en));
+	}	
+	private class BinaryTree{
+		private class Node{
+			
+			Node left;
+			Node right;
+			int data;
+		}
+		
+		private Node root;
+		
+		public BinaryTree() //constructor
+		{
+			this.root = takeInput(null, false);
+		}
+		
+		private Node takeInput(Node parent, boolean ilc)
+		{			
+			int item = sc.nextInt();
+			Node nn = new Node();
+			
+			nn.data = item;
+			
+			// left child
+			boolean hlc = sc.nextBoolean();
+			
+			if(hlc)
+			{
+				nn.left = takeInput(nn, true);
+			}
+			
+			// right child 
+			boolean hrc = sc.nextBoolean();
+			
+			if(hrc)
+			{
+				nn.right = takeInput(nn, false);
+			}
+			
+			return nn;
+		}
+		
+		
+		public int lowestCommonAncestor(int sn, int en)
+		{
+			Node minAncestor = null;
+			Node nn =  lowestCommonAncestor(this.root, sn, en, minAncestor);
+			return nn.data;
+		}
+		private Node lowestCommonAncestor(Node node, int sn, int en, Node minAncestor)
+		{
+			if(node == null)
+				return null;
+			
+			if(node.data == sn || node.data == en)
+			{
+				
+				return node;
+			}
+			
+			Node ln = lowestCommonAncestor(node.left, sn, en, minAncestor);
+			Node rn = lowestCommonAncestor(node.right, sn, en, minAncestor);
+			
+			if(ln != null && rn != null && ln.data + rn.data == sn + en)
+			{
+				minAncestor = node;
+			}else if(ln != null && ln.data != 0)
+			{
+				minAncestor = ln;
+			}else if(rn != null && rn.data != 0)
+			{
+				minAncestor = rn;
+			}
+			
+			return minAncestor;
+		}
+		
+		
+//		public void display()
+//		{
+//			display(this.root);
+//		}
+//	
+//		private void display(Node node) {
+//	
+//			if(node == null)
+//			{
+//				return;
+//			}
+//			if(node.left != null)
+//				System.out.print(node.left.data+" => ");
+//			else
+//				System.out.print(". =>");
+//			
+//			System.out.print(node.data);
+//			
+//			if(node.right != null)
+//				System.out.println(" <= "+node.right.data);
+//			else
+//				System.out.println(" <= .");
+//			
+//			display(node.left);
+//			display(node.right);
+//			
+//		}
+	}
+}
+
+
+
+
+
+
+
+END---------------------------------------------END-----------------------------------------------END-------
+
+
+
+
+
+
+
+
+BINARY TREES -- PRINT ALL LEAF NODES
+Given a Binary Tree Print all the leaf nodes.
+
+
+Input Format:
+Level order input of the binary tree
+
+Constraints:
+Total no of nodes <1000
+Output Format:
+All leaf nodes from left to right in single line
+
+Sample Input:
+1
+2 3
+4 5
+6 7
+-1 -1
+-1 -1
+-1 -1
+-1 -1
+Sample Output:
+4 5 6 7
+
+
+
+
+
+
+public class Main {
+	
+	static Scanner sc = new Scanner(System.in);
+	public static void main(String[] args) 
+	{
+		
+		Main m = new Main();
+		BinaryTree bt = m.new BinaryTree();	
+		bt.pLeafNodes();
+	}	
+	
+	private class BinaryTree
+	{
+		private class Node
+		{
+			Node left;
+			Node right;
+			int data;
+		}
+		
+		private Node root;
+		
+		BinaryTree()
+		{
+			this.root = takeInput(null);
+		} 
+
+		private Node takeInput(Node node)
+		{
+			
+				Node np = new Node();
+				int dd = sc.nextInt();
+				np.data = dd;
+				node = np;
+			
+			LinkedList<Node> queue = new LinkedList<>();
+			queue.addFirst(node);
+			
+			while(!queue.isEmpty())
+			{
+				Node nn = queue.removeFirst();
+				
+				int lh = sc.nextInt();
+				
+				if(lh !=-1)
+				{
+					Node nl = new Node();
+					nl.data = lh;
+					nn.left = nl;
+					queue.addLast(nl);
+				}
+				
+				int rh = sc.nextInt();
+				
+				if(rh !=-1)
+				{
+					Node nr = new Node();	
+					nr.data = rh;
+					nn.right = nr;
+					queue.addLast(nr);
+				}				
+			}
+			
+			return node;	
+		}
+		
+		public void pLeafNodes()
+		{
+			pLeafNodes(this.root);
+		}
+		
+		private void pLeafNodes(Node node)
+		{
+			if(node == null)
+			{
+				return;
+			}
+			if(node.left == null && node.right == null)
+			{
+				System.out.print(node.data+" ");
+				return;
+			}
+			
+			pLeafNodes(node.left);
+			pLeafNodes(node.right);
+				
+		}
+		
+	}
+}
+
+
+
+
+END---------------------------------------------END-----------------------------------------------END-------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TREE LEFT VIEW
+Given a binary tree , print its nodes from root to bottom as visible from left side of tree
+
+
+Input Format:
+Level order input
+
+Output Format:
+Single line of space separated integers denoting the view from top to bottom
+
+Sample Input:
+1 2 3 4 5 -1 6 -1 -1 -1 -1 -1 -1
+Sample Output:
+1 2 4
+
+
+
+
+
+
+import java.util.*;
+
+public class Main{
+	static Scanner sc = new Scanner(System.in);
+	public static void main(String[] args) {
+		Main mn = new Main();
+		BinaryTree bt = mn.new BinaryTree();
+		bt.treeRightView();
+	}
+	
+	class BinaryTree
+	{
+		
+		private class Node
+		{
+			Node left;
+			Node right;
+			int data;
+		}
+		
+		private Node root;
+		
+		BinaryTree()
+		{
+			this.root = takeInput(null);
+		} 
+
+		private Node takeInput(Node node)
+		{
+			
+				Node np = new Node();
+				int dd = sc.nextInt();
+				np.data = dd;
+				node = np;
+			
+			LinkedList<Node> queue = new LinkedList<>();
+			queue.addFirst(node);
+			
+			while(!queue.isEmpty())
+			{
+				Node nn = queue.removeFirst();
+				
+				int lh = sc.nextInt();
+				
+				if(lh !=-1)
+				{
+					Node nl = new Node();
+					nl.data = lh;
+					nn.left = nl;
+					queue.addLast(nl);
+				}
+				
+				int rh = sc.nextInt();
+				
+				if(rh !=-1)
+				{
+					Node nr = new Node();	
+					nr.data = rh;
+					nn.right = nr;
+					queue.addLast(nr);
+				}				
+			}
+			
+			return node;	
+		}
+		
+		public void treeRightView()
+		{
+			treeRightView(this.root);
+		}
+//		1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+		private void treeRightView(Node node)
+		{
+//			System.out.print(this.root.data+" ");
+			LinkedList<Node> queue = new LinkedList<Node>();
+			queue.addLast(this.root);
+			while(!queue.isEmpty())
+			{
+				Node nd = queue.removeFirst();
+				
+				System.out.print(nd.data+" ");
+				
+				LinkedList<Node> queue1 = new LinkedList<Node>();
+				
+				if(nd.left != null)
+				{
+					queue1.addLast(nd.left);
+				}
+				if(nd.right != null)
+				{
+					queue1.addLast(nd.right);
+				}
+				while(!queue.isEmpty())
+				{
+					Node rl = queue.removeFirst();
+					if(rl.left != null)
+					{
+						queue1.addLast(rl.left);
+					}
+					if(rl.right != null)
+					{
+						queue1.addLast(rl.right);
+					}	
+				}
+				queue = queue1;
+				
+			}
+		}
+		
+		
+	}
+}
+
+
+
+
+END---------------------------------------------END-----------------------------------------------END-------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TREE RIGHT VIEW
+Given a binary tree , print its nodes from root to bottom as visible from right side of tree
+
+
+Input Format:
+Level order input
+
+Output Format:
+Single line of space separated integers denoting the view from top to bottom
+
+Sample Input:
+1 2 3 4 5 -1 6 -1 -1 -1 -1 -1 -1
+Sample Output:
+1 3 6
+
+
+
+
+
+
+import java.util.*;
+
+public class Main{
+	static Scanner sc = new Scanner(System.in);
+	public static void main(String[] args) {
+		Main mn = new Main();
+		BinaryTree bt = mn.new BinaryTree();
+		bt.treeRightView();
+	}
+	
+	class BinaryTree
+	{
+		
+		private class Node
+		{
+			Node left;
+			Node right;
+			int data;
+		}
+		
+		private Node root;
+		
+		BinaryTree()
+		{
+			this.root = takeInput(null);
+		} 
+
+		private Node takeInput(Node node)
+		{
+			
+				Node np = new Node();
+				int dd = sc.nextInt();
+				np.data = dd;
+				node = np;
+			
+			LinkedList<Node> queue = new LinkedList<>();
+			queue.addFirst(node);
+			
+			while(!queue.isEmpty())
+			{
+				Node nn = queue.removeFirst();
+				
+				int lh = sc.nextInt();
+				
+				if(lh !=-1)
+				{
+					Node nl = new Node();
+					nl.data = lh;
+					nn.left = nl;
+					queue.addLast(nl);
+				}
+				
+				int rh = sc.nextInt();
+				
+				if(rh !=-1)
+				{
+					Node nr = new Node();	
+					nr.data = rh;
+					nn.right = nr;
+					queue.addLast(nr);
+				}				
+			}
+			
+			return node;	
+		}
+		
+		public void treeRightView()
+		{
+			treeRightView(this.root);
+		}
+//		1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+		private void treeRightView(Node node)
+		{
+//			System.out.print(this.root.data+" ");
+			LinkedList<Node> queue = new LinkedList<Node>();
+			queue.addLast(this.root);
+			while(!queue.isEmpty())
+			{
+				LinkedList<Node> queue1 = new LinkedList<Node>();
+				
+				while(queue.size() > 1)
+				{
+					Node rl = queue.removeFirst();
+					if(rl.left != null)
+					{
+						queue1.addLast(rl.left);
+					}
+					if(rl.right != null)
+					{
+						queue1.addLast(rl.right);
+					}	
+				}
+				
+				
+				Node nd = queue.removeFirst();
+				
+				System.out.print(nd.data+" ");
+				
+				if(nd.left != null)
+				{
+					queue1.addLast(nd.left);
+				}
+				if(nd.right != null)
+				{
+					queue1.addLast(nd.right);
+				}
+				
+				queue = queue1;
+				
+			}
+		}
+		
+		
+	}
+}
+
+
+
+END---------------------------------------------END---------------------------------------------------END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+VERTICAL ORDER PRINT BINARY TREE
+
+
+You will be given a Binary Tree. Your task is to print the binary tree in Vertical Fashion. The image below describes how we define a vertical traversal of a tree.
+
+
+Input Format:
+You will be given an Integer N denoting the number of levels in the corresponding tree. On the next line you will be given (2^N)-1 integers denoting the level order input for the tree. If at any level any node is absent then that will denoted by -1 and every integer other than -1 shows the presence of a node at that level.
+
+Output Format:
+Print all nodes of a given column in the same line.
+
+Image
+
+Sample Input:
+4 
+1 2 3 4 5 6 7 -1 -1 -1 -1 -1 8 -1 9 -1 -1 -1 -1
+Sample Output:
+4
+2
+1 5 6
+3 8 
+7
+9
+
+
+
+
+
+import java.util.*;
+
+public class Main{
+	static Scanner sc = new Scanner(System.in);
+	public static void main(String[] args) {
+		int k = sc.nextInt();
+		Main mn = new Main();
+		BinaryTree bt = mn.new BinaryTree();
+		
+		bt.treeRightView(k);
+	}
+	
+	class BinaryTree
+	{
+		
+		private class Node
+		{
+			Node left;
+			Node right;
+			int data;
+		}
+		
+		private Node root;
+		
+		BinaryTree()
+		{
+			this.root = takeInput(null);
+		} 
+
+		private Node takeInput(Node node)
+		{
+			
+				Node np = new Node();
+				int dd = sc.nextInt();
+				np.data = dd;
+				node = np;
+			
+			LinkedList<Node> queue = new LinkedList<>();
+			queue.addFirst(node);
+			
+			while(!queue.isEmpty())
+			{
+				Node nn = queue.removeFirst();
+				
+				int lh = sc.nextInt();
+				
+				if(lh !=-1)
+				{
+					Node nl = new Node();
+					nl.data = lh;
+					nn.left = nl;
+					queue.addLast(nl);
+				}
+				
+				int rh = sc.nextInt();
+				
+				if(rh !=-1)
+				{
+					Node nr = new Node();	
+					nr.data = rh;
+					nn.right = nr;
+					queue.addLast(nr);
+				}				
+			}
+			
+			return node;	
+		}
+		
+		public void treeRightView(int k)
+		{
+			String[] ans = new String[k*2];
+			treeRightView(this.root, ans, k);
+			for(String st : ans)
+			{
+				if(st != null)
+					System.out.println(st);
+			}
+		}
+
+		
+		private void treeRightView(Node node, String[] ans, int hd)
+		{
+					
+			if(node == null)
+			{
+				return;
+			}
+			
+			if(ans[hd] == null)
+			{
+				ans[hd] = node.data+" ";
+			}else {
+				ans[hd] += node.data+" ";
+			}
+			
+			treeRightView(node.left, ans, hd-1);			
+			treeRightView(node.right, ans, hd+1);
+		}
+	}
+}
+
+
+END---------------------------------------------END---------------------------------------------------END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ROOT TO LEAF ( BINARY TREE)
+Given a binary tree and a number k, print out all root to leaf paths where the sum of all nodes value is same as the given number.
+
+
+Input Format:
+First line contains the values of all the nodes in the binary tree in pre-order format where true suggest the node exists and false suggests it is NULL. Second line contains the number k.
+
+Constraints:
+None
+Output Format:
+Display the root to leaf path whose sum is equal to k.
+
+Sample Input:
+10 true 20 true 30 false false true 50 false false true 40 true 60 false false true 73 false false
+60
+Sample Output:
+10 20 30
+Explanation:
+The given tree is in pre order traversal. So convert it into binary tree and check root to leaf path sum.
+
+
+
+
+
+import java.util.*;
+
+public class Main{
+	static Scanner sc = new Scanner(System.in);
+	public static void main(String[] args) {
+		
+		Main mn = new Main();
+		BinaryTree bt = mn.new BinaryTree();
+		int k = sc.nextInt();
+		bt.rootToLeaf_Program(k);
+		
+	}
+	
+	class BinaryTree
+	{
+		
+		private class Node
+		{
+			Node left;
+			Node right;
+			int data;
+		}
+		
+		private Node root;
+		
+		BinaryTree()
+		{
+			this.root = takeInput(null, false);
+		} 
+
+		private Node takeInput(Node node, boolean ilc)
+		{
+			
+			int item = sc.nextInt();
+			Node nn = new Node();
+			nn.data = item;
+			
+			boolean ls = sc.nextBoolean();
+			
+			if(ls)
+			{
+				nn.left = takeInput(nn, ls);
+			}
+			
+			boolean rs = sc.nextBoolean();
+			
+			if(rs)
+			{
+				nn.right = takeInput(nn, rs);
+			}
+				
+			return nn;	
+		}
+		
+
+	public void rootToLeaf_Program(int k)
+	{
+		rootToLeaf_Program(k, this.root, 0,"");
+	}
+		private void rootToLeaf_Program(int k, Node node, int sum, String ans)
+		{
+			
+			if(node == null)
+			{
+				return;
+			}
+			
+			if(sum + node.data <= k)
+			{
+				sum += node.data;
+			}else {
+				return;
+			}
+			
+			if(node.right == null && node.left == null && sum == k)
+			{
+				System.out.println(ans+node.data);
+			}
+			
+			
+			
+			rootToLeaf_Program(k, node.left, sum, ans+node.data+" ");
+			rootToLeaf_Program(k, node.right, sum, ans+node.data+" ");
+		}
+		
+		
+	}
+}
+
+
+END---------------------------------------------END---------------------------------------------------END
+
+
+
+
+
+
+
+
+
+

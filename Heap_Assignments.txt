@@ -1,0 +1,418 @@
+MERGE K SORTED ARRAYS
+Given K sorted arrays each with N elements merge them and output the sorted array
+
+
+Input Format:
+First line contains 2 integers K and N.
+
+K is number of arrays.
+
+N is number of elements in each array.
+
+Constraints:
+Elements of array <= |10^15|
+N <= 10^5
+K <= 10
+Output Format:
+Single line consisting of space separated numbers
+
+Sample Input:
+3 4
+1 3 5 7
+2 4 6 8
+0 9 10 11
+Sample Output:
+0 1 2 3 4 5 6 7 8 9 10 11
+
+
+
+
+
+import java.util.*;
+
+
+public class Main {
+	
+	public static void main(String[] args) {
+		
+		Scanner sc = new Scanner(System.in);
+		
+		Heap hp = new Heap();
+		
+		int k = sc.nextInt();// no. of arrays
+		int n = sc.nextInt();// no. of elements in an array
+		
+		ArrayList<ArrayList<Integer>> mstr = new ArrayList<>();
+		
+		for(int i = 0; i < k; i++)
+		{
+			ArrayList<Integer> l1 = new ArrayList<>();
+			for(int j = 0; j < n; j++)
+			{
+				l1.add(sc.nextInt());
+			}
+			mstr.add(l1);
+		}		
+		ArrayList<Integer> al = mergeK_Sorted(mstr);
+		for(int it : al)
+		{
+			System.out.print(it+" ");
+		}
+	}
+	
+	public static class Pair implements Comparable<Pair>
+	{
+		int data;
+		int indexNo;
+		int listNo;
+		
+		public int compareTo(Pair o)
+		{
+			return o.data - this.data;
+		}
+		
+	}
+	
+	public static ArrayList<Integer> mergeK_Sorted(ArrayList<ArrayList<Integer>> lists)
+	{
+		ArrayList<Integer> ans = new ArrayList<>();
+
+		Heap<Pair> heap = new Heap<Pair>();
+
+		for (int i = 0; i < lists.size(); i++) {
+
+			Pair np = new Pair();
+			np.data = lists.get(i).get(0);
+			np.listNo = i;
+			np.indexNo = 0;
+
+			heap.add(np);
+		}
+
+		while (!heap.isEmpty()) {
+
+			Pair rp = heap.remove();
+			ans.add(rp.data);
+
+			// update the removed pair
+			rp.indexNo++;
+			if (rp.indexNo < lists.get(rp.listNo).size()) {
+				rp.data = lists.get(rp.listNo).get(rp.indexNo);
+				heap.add(rp);
+			}
+
+		}
+
+		return ans;
+	}
+}// Main
+
+
+class Heap<T extends Comparable<T>>
+{
+	ArrayList<T> data = new ArrayList<>();
+
+	public void add(T item)
+	{
+		data.add(item);
+		int idx = data.size()-1;
+		upHeapify(idx);
+	}
+	private void upHeapify(int li)
+	{
+		if(li == 0)
+		{
+			return;
+		}
+		
+		int pi = (li-1)/2;
+		
+		
+		if(isLarger(data.get(li), data.get(pi)) > 0)
+		{
+			swap(pi, li);				
+			upHeapify(pi);
+		}
+	}
+	
+	public void swap(int i , int j)
+	{
+		T ith = data.get(i);
+		T jth = data.get(j);
+		
+		data.set(i, jth);
+		data.set(j, ith);
+	}
+	
+	public T remove()
+	{
+		swap(0 , data.size()-1);
+		
+		T rv = this.data.remove(data.size()-1);
+		
+		downHeapify(0);
+		
+		return rv;
+	}
+	
+	private void downHeapify(int fi)
+	{
+		int mini = fi;
+		int lc = 2*fi+1;
+		int rc = 2*fi+2;
+		
+		if(lc < data.size() && isLarger(data.get(lc), data.get(mini)) > 0)
+		{
+			mini = lc;
+		}
+		if(rc < data.size() && isLarger(data.get(rc), data.get(mini)) > 0)
+		{
+			mini = rc;
+		}
+		
+		if(mini != fi)
+		{
+			swap(mini, fi);
+			downHeapify(mini);
+		}
+			
+	}
+	
+	public T getHP()
+	{
+		return data.get(0);
+	}
+	public void display()
+	{
+		System.out.println(data);
+	}
+	public int size()
+	{
+		return data.size();
+	}
+	
+	public boolean isEmpty()
+	{
+		return this.data.size() == 0;
+	}
+	
+	
+	public int isLarger(T t, T o)
+	{
+		return t.compareTo(o);
+	}
+}// Heap
+
+END--------------------------------------------------END-------------------------------------------------END
+
+
+
+
+
+
+
+
+
+
+
+KTH_LARGEST
+Find k largest elements in an array.
+
+
+Input Format:
+Input the size of the array N and input N more numbers and input the value of k
+
+Output Format:
+Display the kth largest number
+
+Sample Input:
+5
+1
+4
+2
+6
+7
+2
+Sample Output:
+6
+
+
+
+
+
+
+
+
+import java.util.*;
+
+
+public class Heap<T extends Comparable<T>> {
+
+    private ArrayList<T> data;
+    private boolean isMin;
+
+    public Heap() {
+        this(false);
+    }
+
+    public Heap(boolean isMin) {
+        this.data = new ArrayList<>();
+        this.isMin = isMin;
+    }
+
+    public Heap(T[] arr, boolean isMin) {
+        this(isMin);
+
+        for (int i = 0; i < arr.length; i++) {
+            this.data.add(arr[i]);
+        }
+
+        for (int i = (arr.length / 2) - 1; i >= 0; i--) {
+            this.downHeapify(i);
+        }
+    }
+
+    public int size() {
+        return this.data.size();
+    }
+
+    public boolean isEmpty() {
+        return this.size() == 0;
+    }
+
+    public T getHP() {
+        return this.data.get(0);
+    }
+
+    public void add(T item) {
+        this.data.add(item);
+        this.upHeapify(this.data.size() - 1);
+    }
+
+    private void upHeapify(int ci) {
+        if (ci == 0) {
+            return;
+        }
+        int pi = (ci - 1) / 2;
+        if (!isLarger(pi, ci)) {
+            swap(pi, ci);
+            this.upHeapify(pi);
+        }
+    }
+
+    private void swap(int i, int j) {
+        T temp = this.data.get(i);
+        this.data.set(i, this.data.get(j));
+        this.data.set(j, temp);
+    }
+
+    private boolean isLarger(int i, int j) {
+        T ithItem = this.data.get(i);
+        T jthItem = this.data.get(j);
+        if (this.isMin) {
+            return ithItem.compareTo(jthItem) < 0;
+        }
+
+        return ithItem.compareTo(jthItem) > 0;
+    }
+
+    public T remove() {
+        T rv = this.data.get(0);
+        swap(0, this.data.size() - 1);
+        this.data.remove(this.data.size() - 1);
+        this.downHeapify(0);
+        return rv;
+    }
+
+    private void downHeapify(int pi) {
+        int lci = 2 * pi + 1;
+        int rci = 2 * pi + 2;
+        int mi = pi;
+        if (lci < this.data.size() && isLarger(lci, mi)) {
+            mi = lci;
+        }
+        if (rci < this.data.size() && isLarger(rci, mi)) {
+            mi = rci;
+        }
+        if (mi != pi) {
+            this.swap(mi, pi);
+            this.downHeapify(mi);
+        }
+    }
+
+    public void display() {
+        this.displayNode(0);
+    }
+
+    private void displayNode(int idx) {
+        int lci = 2 * idx + 1;
+        int rci = 2 * idx + 2;
+
+        T node = this.data.get(idx);
+        String str = "";
+        if (lci < this.data.size()) {
+            T lc = this.data.get(lci);
+            str += lc + "=>";
+        } else {
+            str += "END=>";
+        }
+        str += node;
+        if (rci < this.data.size()) {
+            T rc = this.data.get(rci);
+            str += "<=" + rc;
+        } else {
+            str += "<=END";
+        }
+        System.out.println(str);
+        if (lci < this.data.size()) {
+            this.displayNode(lci);
+        }
+        if (rci < this.data.size()) {
+            this.displayNode(rci);
+        }
+    }
+	public static class Pair implements Comparable<Pair>
+	{
+		int data;
+		
+		
+		public int compareTo(Pair o)
+		{
+			return o.data - this.data;
+		}
+		
+	}
+	public static int kthLargest(int[] arr, int k) throws Exception 
+	{
+		Heap<Pair> hp = new Heap<Pair>(true);
+		
+		for(int i = 0; i < arr.length; i++)
+		{
+			Pair rp = new Pair();
+			rp.data = arr[i];
+			hp.add(rp);
+		}	
+		int sd = 0;
+		for(int j = 0; j < k; j++)
+		{
+			Pair sp = hp.remove();
+			sd = sp.data;
+			
+		}
+		return sd;
+		
+	}
+	
+ public static void main(String[] args) throws Exception {
+    	Scanner s= new Scanner(System.in);
+    	int str= s.nextInt();
+    	int[] num = new int[str];
+    	
+    	for(int i=0; i<str ; i++){
+    		num[i]= s.nextInt();
+    		
+    	}
+		int k= s.nextInt();
+		System.out.println(kthLargest(num, k));
+	}
+}
